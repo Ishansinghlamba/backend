@@ -20,16 +20,18 @@ const userSchema = new mongoose.Schema(
 const User = mongoose.model("user",userSchema)
 
 //POST SCHEMA AND MODEL
-const PostSchema = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
     {
-        firstname: String,
-        lastname:String,
-        age:Number,
+      title:{type:String, required:true},
+      body:{type:String, required :true}
+    },{
+        versionKey:false,
+        timestamps:true
     }
 )
-const User = mongoose.model("user",userSchema)
+const Post = mongoose.model("post",postSchema)
 
-//USERS
+// CRUD OPERATIONS USERS
 app.post("/users", async (req,res)=>{
     const user = await User.create(req.body);
     return res.send(user);
@@ -47,6 +49,28 @@ app.patch("/users/:id", async (req,res)=>{
 app.delete("/users/:id", async (req,res)=>{
     const user = await User.findByIdAndDelete(req.params.id);
     return res.send(user);
+})
+
+// CRUD OPERATIONS POSTS
+app.post("/posts", async (req,res)=>{
+    try{
+    const post = await Post.create(req.body);
+    return res.send(post);
+    } catch(err){
+        return res.status(400).send(err.message);
+    }
+})
+app.get("/posts", async (req,res)=>{
+    const post = await Post.find({}).lean().exec();
+    return res.send(post);
+})
+app.get("/posts/:id", async (req,res)=>{
+    const post = await Post.findById(req.params.id);
+    return res.send(post);
+})
+app.patch("/posts/:id", async (req,res)=>{
+    const post = await Post.findByIdAndUpdate(req.params.id,req.body,{new:true});
+    return res.send(post);
 })
 app.listen(6789, async ()=>{
     await connect();
