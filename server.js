@@ -9,6 +9,7 @@ const connect = ()=>{
         useCreateIndex:true
     })
 }
+//USER SCHEMA AND MODEL
 const userSchema = new mongoose.Schema(
     {
         firstname: String,
@@ -17,37 +18,33 @@ const userSchema = new mongoose.Schema(
     }
 )
 const User = mongoose.model("user",userSchema)
-//new
-const adminSchema = new mongoose.Schema(
+
+//POST SCHEMA AND MODEL
+const PostSchema = new mongoose.Schema(
     {
         firstname: String,
         lastname:String,
         age:Number,
     }
 )
-const Admin = mongoose.model("admin",adminSchema)
+const User = mongoose.model("user",userSchema)
 
+//USERS
 app.post("/users", async (req,res)=>{
     const user = await User.create(req.body);
     return res.send(user);
 })
-// app.get("/users", async (req,res)=>{
-//     const user = await User.find().lean().exec();
-//     return res.send(user);
-// })
+
 app.get("/users", async (req,res)=>{
     const user = await User.find({}).lean().exec();
     return res.send(user);
 })
-app.post("/admins", async (req,res)=>{
-    const admin = await Admin.create(req.body);
-    return res.send(admin);
-})
+
 app.patch("/users/:id", async (req,res)=>{
     const user = await User.findByIdAndUpdate(req.params.id,req.body,{new:true});
     return res.send(user);
 })
-app.patch("/users/:id", async (req,res)=>{
+app.delete("/users/:id", async (req,res)=>{
     const user = await User.findByIdAndDelete(req.params.id);
     return res.send(user);
 })
