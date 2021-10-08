@@ -47,6 +47,10 @@ app.patch("/users/:id", async (req,res)=>{
     const user = await User.findByIdAndUpdate(req.params.id,req.body,{new:true});
     return res.send(user);
 })
+app.patch("/users/:id", async (req,res)=>{
+    const user = await User.findByIdAndDelete(req.params.id);
+    return res.send(user);
+})
 app.listen(6789, async ()=>{
     await connect();
     console.log("running on port 6789")
