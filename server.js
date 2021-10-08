@@ -24,7 +24,13 @@ const User = mongoose.model("user",userSchema)
 const postSchema = new mongoose.Schema(
     {
       title:{type:String, required:true},
-      body:{type:String, required :true}
+      body:{type:String, required :true},
+      userid:{
+        type:mongoose.Schema.Types.ObjectId,
+      ref:"user",
+      required:true
+  }
+
     },{
         versionKey:false,
         timestamps:true
@@ -35,7 +41,12 @@ const Post = mongoose.model("post",postSchema)
 //COMMENT BODY SCHEMA
 const commentSchema = new mongoose.Schema(
     {
-      commentbody:{type:String, required :true}
+      commentbody:{type:String, required :true},
+      postid:{
+          type:mongoose.Schema.Types.ObjectId,
+        ref:"post",
+        required:true
+    }
     },{
         versionKey:false,
         timestamps:true
