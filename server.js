@@ -17,6 +17,15 @@ const userSchema = new mongoose.Schema(
     }
 )
 const User = mongoose.model("user",userSchema)
+//new
+const adminSchema = new mongoose.Schema(
+    {
+        firstname: String,
+        lastname:String,
+        age:Number,
+    }
+)
+const Admin = mongoose.model("admin",adminSchema)
 
 app.post("/users", async (req,res)=>{
     const user = await User.create(req.body);
@@ -29,6 +38,10 @@ app.post("/users", async (req,res)=>{
 app.get("/users", async (req,res)=>{
     const user = await User.find({}).lean().exec();
     return res.send(user);
+})
+app.post("/admins", async (req,res)=>{
+    const admin = await Admin.create(req.body);
+    return res.send(admin);
 })
 app.listen(6789, async ()=>{
     await connect();
