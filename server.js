@@ -43,6 +43,10 @@ app.post("/admins", async (req,res)=>{
     const admin = await Admin.create(req.body);
     return res.send(admin);
 })
+app.patch("/users/:id", async (req,res)=>{
+    const user = await User.findByIdAndUpdate(req.params.id,req.body,{new:true});
+    return res.send(user);
+})
 app.listen(6789, async ()=>{
     await connect();
     console.log("running on port 6789")
