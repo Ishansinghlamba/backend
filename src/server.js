@@ -2,23 +2,12 @@ const express = require("express");
 const app = express();
 app.use(express.json())
 const mongoose = require("mongoose")
-const connect = ()=>{
-    return mongoose.connect("mongodb://127.0.0.1:27017/practice_mongo",{
-        useNewUrlParser:true,
-        useUnifiedTopology:true,
-        useCreateIndex:true,
-        useFindAndModify:false
-    })
-}
+const connect = require("./configs/db")
+
+
+const User = require("./models/user.model")
 //USER SCHEMA AND MODEL
-const userSchema = new mongoose.Schema(
-    {
-        firstname: String,
-        lastname:String,
-        age:Number,
-    }
-)
-const User = mongoose.model("user",userSchema)
+
 
 //POST SCHEMA AND MODEL
 const postSchema = new mongoose.Schema(
@@ -29,7 +18,12 @@ const postSchema = new mongoose.Schema(
         type:mongoose.Schema.Types.ObjectId,
       ref:"user",
       required:true
-  }
+  },
+  tagids:[{
+    type:mongoose.Schema.Types.ObjectId,
+  ref:"tag",
+  required:true
+}]
 
     },{
         versionKey:false,
@@ -57,7 +51,7 @@ const Comment = mongoose.model("comment",commentSchema)
 //TAG SCHEMA
 const tagSchema = new mongoose.Schema(
     {
-      name:{type:String, required :true}
+      name:{type:String, required :true},
     },{
         versionKey:false,
         timestamps:true
@@ -95,7 +89,7 @@ app.post("/posts", async (req,res)=>{
     }
 })
 app.get("/posts", async (req,res)=>{
-    const post = await Post.find({}).lean().exec();
+    const post = await Post.find({}).populate("userid").populate("tagids").lean().exec();
     return res.send(post);
 })
 app.get("/posts/:id", async (req,res)=>{
