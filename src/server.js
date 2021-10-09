@@ -1,63 +1,28 @@
 const express = require("express");
 const app = express();
 app.use(express.json())
-const mongoose = require("mongoose")
 const connect = require("./configs/db")
 
 
-const User = require("./models/user.model")
+const User = require("./models/user.model");
+
+const Post = require("./models/post.model");
+
+const Comment = require("./models/comment.model");
+
+const Tag = require("./models/tag.model");
+
 //USER SCHEMA AND MODEL
 
 
 //POST SCHEMA AND MODEL
-const postSchema = new mongoose.Schema(
-    {
-      title:{type:String, required:true},
-      body:{type:String, required :true},
-      userid:{
-        type:mongoose.Schema.Types.ObjectId,
-      ref:"user",
-      required:true
-  },
-  tagids:[{
-    type:mongoose.Schema.Types.ObjectId,
-  ref:"tag",
-  required:true
-}]
 
-    },{
-        versionKey:false,
-        timestamps:true
-    }
-)
-const Post = mongoose.model("post",postSchema)
 
 //COMMENT BODY SCHEMA
-const commentSchema = new mongoose.Schema(
-    {
-      commentbody:{type:String, required :true},
-      postid:{
-          type:mongoose.Schema.Types.ObjectId,
-        ref:"post",
-        required:true
-    }
-    },{
-        versionKey:false,
-        timestamps:true
-    }
-)
-const Comment = mongoose.model("comment",commentSchema)
+
 
 //TAG SCHEMA
-const tagSchema = new mongoose.Schema(
-    {
-      name:{type:String, required :true},
-    },{
-        versionKey:false,
-        timestamps:true
-    }
-)
-const Tag = mongoose.model("tag",tagSchema)
+
 
 // CRUD OPERATIONS USERS
 app.post("/users", async (req,res)=>{
